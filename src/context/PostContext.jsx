@@ -2,6 +2,12 @@ import { useEffect, useState } from 'react';
 import { initialPost } from '../data/initialPost';
 import { PostContext } from './postContextObject';
 import { saveMedia } from '../utils/mediaStorage';
+import {
+  clearSession,
+  createAccount,
+  getSession,
+  signIn,
+} from '../utils/authStorage';
 
 const STORAGE_KEY = 'redsocial-react-post-v2';
 
@@ -14,7 +20,17 @@ function loadPosts() {
 
   try {
     const parsedPost = JSON.parse(savedPost);
-    return Array.isArray(parsedPost) ? parsedPost : [parsedPost];
+    const posts = Array.isArray(parsedPost) ? parsedPost : [parsedPost];
+
+    return posts.map((post) => {
+      const isUnsharedInitialPost =
+        post.author?.name === initialPost.author.name &&
+        post.text === initialPost.text &&
+        post.shared !== true &&
+        post.shares === 3;
+
+      return isUnsharedInitialPost ? { ...post, shares: 0 } : post;
+    });
   } catch {
     return [initialPost];
   }
@@ -23,14 +39,26 @@ function loadPosts() {
 export function PostProvider({ children }) {
   const [posts, setPosts] = useState(loadPosts);
 
-  const [currentUser] = useState({
-    name: 'Monica Estudiante',
-    avatar: 'ME',
-  });
+  const [currentUser, setCurrentUser] = useState(getSession);
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
   }, [posts]);
+
+  async function register(name, email, password) {
+    const user = await createAccount(name, email, password);
+    setCurrentUser(user);
+  }
+
+  async function login(email, password) {
+    const user = await signIn(email, password);
+    setCurrentUser(user);
+  }
+
+  function logout() {
+    clearSession();
+    setCurrentUser(null);
+  }
 
   function togglePostLike(postId) {
     setPosts((currentPosts) =>
@@ -57,8 +85,10 @@ export function PostProvider({ children }) {
 
         return {
           ...post,
-          shared: true,
-          shares: post.shared ? post.shares : post.shares + 1,
+          shared: !post.shared,
+          shares: post.shared
+            ? Math.max(0, post.shares - 1)
+            : post.shares + 1,
         };
       }),
     );
@@ -80,6 +110,7 @@ export function PostProvider({ children }) {
     const newPost = {
       id: newPostId,
       author: {
+        id: currentUser.id,
         name: currentUser.name,
         avatar: currentUser.avatar,
       },
@@ -202,6 +233,9 @@ export function PostProvider({ children }) {
   const value = {
     posts,
     currentUser,
+    register,
+    login,
+    logout,
     addPost,
     togglePostLike,
     sharePost,

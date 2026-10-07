@@ -1,0 +1,22 @@
+{
+  "name": "backend-api-redsocial",
+  "version": "1.0.0",
+  "description": "backend-api redsocial educativa",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "init-db": "node src/config/init-db.js"
+  },
+  "author": "profe. Jossy Tello",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "bcryptjs": "^2.4.3"
+  }
+}

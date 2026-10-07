@@ -1,0 +1,106 @@
+### REGISTRO DE NUEVO USUARIO
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "nombre": "Estudiante CESDE",
+    "email": "alumno@cesde.edu.co",
+    "contrasena": "claveSegura123",
+    "fecha_nacimiento": "2000-05-15",
+    "genero": "Hombre"
+}
+
+### LOGIN EXITOSO
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "alumno@cesde.edu.co",
+    "contrasena": "claveSegura123"
+}
+
+### LOGIN FALLIDO (Contraseña incorrecta)
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "alumno@cesde.edu.co",
+    "contrasena": "claveErronea"
+}
+
+
+### --- GESTIÓN DE USUARIOS Y PERFIL ---
+
+### Obtener perfil de un usuario específico
+GET http://localhost:3000/api/usuarios/1
+
+### Actualizar configuración de perfil
+PUT http://localhost:3000/api/usuarios/1
+Content-Type: application/json
+
+{
+    "biografia": "Instructor en CESDE - Beat Plus Sport Leader",
+    "ciudad": "Medellín",
+    "genero": "Hombre"
+}
+
+
+### --- MURO DE ACTIVIDAD ---
+
+### Listar todas las publicaciones del muro
+GET http://localhost:3000/api/publicaciones
+
+### Crear una nueva publicación
+POST http://localhost:3000/api/publicaciones
+Content-Type: application/json
+
+{
+    "usuario_id": 1,
+    "texto": "¡Bienvenidos al taller de Node.js en el CESDE!",
+    "imagen_url": "clase_node.jpg"
+}
+
+
+### --- GRUPOS ---
+
+### Ver lista de grupos disponibles
+GET http://localhost:3000/api/grupos
+
+
+### --- CHAT Y MENSAJERÍA ---
+
+### Obtener historial de chat entre dos usuarios
+GET http://localhost:3000/api/mensajes/1/2
+
+### Enviar un mensaje nuevo
+POST http://localhost:3000/api/mensajes
+Content-Type: application/json
+
+{
+    "remitente_id": 1,
+    "destinatario_id": 2,
+    "contenido": "Hola Jane, ¿cómo vas con el código de la API?"
+}
+
+### Dar Like a la publicación 1
+POST http://localhost:3000/api/publicaciones/1/like
+Content-Type: application/json
+
+{
+    "usuario_id": 2
+}
+
+### Ver cuántos likes tiene la publicación 1
+GET http://localhost:3000/api/publicaciones/1/likes
+
+### Comentar una publicación
+POST http://localhost:3000/api/publicaciones/1/comentarios
+Content-Type: application/json
+
+{
+    "usuario_id": 1,
+    "contenido": "¡Excelente aporte, profe Jossy!"
+}
+
+### Ver todos los comentarios de la publicación 1
+GET http://localhost:3000/api/publicaciones/1/comentarios

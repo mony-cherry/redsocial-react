@@ -46,7 +46,8 @@ export function FacebookPost({ post }) {
           <span className="stat-line">{post.likes} personas</span>
         </span>
         <span className="stat-line">
-          {commentCount} comentarios - {post.shares} compartidos
+          {commentCount} comentarios - {post.shares}{' '}
+          {post.shares === 1 ? 'compartido' : 'compartidos'}
         </span>
       </section>
 

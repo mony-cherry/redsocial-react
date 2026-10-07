@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 const menuItems = [
   { label: 'Inicio', path: '/' },
+  { label: 'Mi perfil', path: '/perfil' },
   { label: 'Amigos', path: '/amigos' },
   { label: 'Grupos', path: '/grupos' },
   { label: 'Marketplace', path: '/marketplace' },
